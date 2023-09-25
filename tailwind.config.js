@@ -3,12 +3,14 @@ module.exports = {
    content: ['./src/**/*.{html,js,jsx,ts,tsx}'],
    theme: {
       extend: {
+         colors: {
+            primary: '#2756AA',
+         },
          animation: {
             fadeIn: 'fadeIn 0.3s ease-in-out',
             fadeOut: 'fadeOut 0.3s ease-in-out',
          },
 
-         // that is actual animation
          keyframes: (theme) => ({
             fadeIn: {
                '0%': { opacity: '0' },

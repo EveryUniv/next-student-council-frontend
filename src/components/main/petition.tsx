@@ -29,7 +29,7 @@ export default function Petition({ petitions }: { petitions?: IPetition[] }) {
       //    </ul>
       // </div>
       <ol className='relative px-4 border-l border-gray-200 flex flex-col gap-4'>
-         {petitions.map((item) => (
+         {petitions.slice(0, 3).map((item) => (
             <div key={item.id} className='flex items-center justify-between gap-3'>
                <span className='flex items-center justify-center w-10 h-10 bg-blue-100 rounded-full ring-8 ring-white'>
                   <ProfilePic className='rounded-full shadow-lg opacity-40' />

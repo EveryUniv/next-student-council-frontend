@@ -12,7 +12,7 @@ interface Props extends React.ComponentProps<'header'> {
 export default function Gnb({ left, center, right, ...props }: Props) {
    return (
       <header
-         className={`w-full flex justify-between px-1.5 h-[50px] items-center ${
+         className={`w-full flex justify-between px-1.5 h-[60px] items-center bg-primary ${
             typeof props.className !== 'undefined' ? props.className : ''
          }`}
          {...props}

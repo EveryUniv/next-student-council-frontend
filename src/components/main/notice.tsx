@@ -11,7 +11,7 @@ export interface INotice {
  */
 export default function Notice({ notices }: { notices?: INotice[] }) {
    return notices ? (
-      <div className='px-4 py-5 m-4 rounded-xl bg-gray-100'>
+      <div className='px-4 py-5 mx-4 mb-4 rounded-xl bg-white'>
          <h3 className='font-bold text-lg'>최신 공지사항</h3>
          <ul className='mt-3'>
             {notices?.map((item) => (

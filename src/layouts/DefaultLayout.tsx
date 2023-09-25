@@ -21,7 +21,7 @@ export default function DefaultLayout({ children, className, ...props }: Default
                center={<Gnb.Title>{title === '' ? <TextSkeleton width={4} /> : title}</Gnb.Title>}
             />
          ) : (
-            <Gnb left={backButton ? <Gnb.GoBack /> : undefined} center={<Gnb.Logo />} />
+            <Gnb left={<Gnb.Logo />} />
          )}
 
          <div

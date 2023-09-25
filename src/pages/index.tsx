@@ -7,6 +7,7 @@ import { Banner, Notice, Petition } from 'components/main';
 import type { IBanner } from 'components/main/banner';
 import type { INotice } from 'components/main/notice';
 import type { IPetition } from 'components/main/petition';
+import Hero from 'components/main/hero';
 
 interface IMain {
    carousels: IBanner[];
@@ -39,14 +40,12 @@ export default function Main() {
 
    return (
       <main>
-         <div className='px-4 pt-5 pb-4'>
-            <h1 className='text-4xl font-bold'>Dankook University</h1>
-            <h2 className='text-2xl font-medium mb-2'>도전하는 지성, 세계를 향한 창조</h2>
-            <span className='text-xs'>DANKOOK UNIVERSITY STUDENT COUNCIL</span>
-         </div>
+         <Hero />
          <Banner banners={main?.carousels} />
-         <Notice notices={main?.recentNews} />
-         <Petition petitions={main?.popularPetitions} />
+         <div className='bg-gray-200 py-4'>
+            <Notice notices={main?.recentNews} />
+            <Petition petitions={main?.popularPetitions} />
+         </div>
       </main>
    );
 }
