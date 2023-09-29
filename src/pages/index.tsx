@@ -8,6 +8,7 @@ import type { IBanner } from 'components/main/banner';
 import type { INotice } from 'components/main/notice';
 import type { IPetition } from 'components/main/petition';
 import Hero from 'components/main/hero';
+import Menu from 'components/main/menu';
 
 interface IMain {
    carousels: IBanner[];
@@ -45,6 +46,7 @@ export default function Main() {
          <div className='bg-gray-200 py-4'>
             <Notice notices={main?.recentNews} />
             <Petition petitions={main?.popularPetitions} />
+            <Menu />
          </div>
       </main>
    );
