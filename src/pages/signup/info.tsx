@@ -111,7 +111,7 @@ export default function SignupInfo() {
          const { data } = await axios.post(API_PATH.USER.SIGNUP.INFO.ROOT(signupToken), signupInfo);
          navigate(ROUTES.MAIN);
          if (data.message === 'ok') {
-            navigate(ROUTES.LOGIN);
+            navigate(ROUTES.LOGIN.ROOT);
          }
       } catch (error) {
          alert(error);

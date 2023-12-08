@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import Login from '../pages/login';
+import Login from '../pages/login/index';
 import { BrowserRouter } from 'react-router-dom';
 import { CONSTANTS } from '../constant';
 
