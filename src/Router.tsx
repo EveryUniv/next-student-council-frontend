@@ -9,7 +9,10 @@ import PetitionForm from 'pages/petition/post';
 
 import Main from 'pages';
 import NotFound from 'pages/404';
-import Login from 'pages/login';
+import Login from 'pages/login/index';
+import FindIdPw from 'pages/login/find';
+import FindId from 'pages/login/find-id';
+import FindPW from 'pages/login/find-pw';
 import Signup from 'pages/signup';
 import SignupTerms from 'pages/signup/terms';
 import SignupVerify from 'pages/signup/verify';
@@ -28,7 +31,10 @@ export default function Router() {
          <DefaultLayout>
             <Routes>
                <Route path={ROUTES.MAIN} element={<Main />} />
-               <Route path={ROUTES.LOGIN} element={<Login />} />
+               <Route path={ROUTES.LOGIN.ROOT} element={<Login />} />
+               <Route path={ROUTES.LOGIN.FINDIDPW} element={<FindIdPw />} />
+               <Route path={ROUTES.LOGIN.FINDID} element={<FindId />} />
+               <Route path={ROUTES.LOGIN.FINDPW} element={<FindPW />} />
                <Route
                   path={ROUTES.MYPAGE}
                   element={

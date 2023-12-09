@@ -37,7 +37,16 @@ export const ROUTES = {
    /** 메인 화면 */
    MAIN: '/',
    /** 로그인 화면 */
-   LOGIN: '/login',
+   LOGIN: {
+      /** 루트 */
+      ROOT: '/login',
+      /** 아이디 및 비밀번호 찾기 */
+      FINDIDPW: '/login/find/user',
+      /** 아이디 찾기 */
+      FINDID: '/login/find/id',
+      /** 비밀번호 재설정 */
+      FINDPW: '/login/find/pw',
+   },
    /** 마이페이지 */
    MYPAGE: '/mypage',
    /** 404 화면 */
@@ -85,7 +94,12 @@ export const API_PATH = {
       /** 내 정보 조회 */
       ME: '/user',
       /** 로그인 */
-      LOGIN: '/user/login',
+      LOGIN: {
+         ROOT: '/user/login',
+         FIND_ID: '/user/find/id',
+         FIND_PW: 'user/find/pwd',
+         CODE_VERIFICATION: '/user/find/pwd/verify',
+      },
       /** 회원가입 */
       SIGNUP: {
          VERIFY: '/user/dku/verify',
