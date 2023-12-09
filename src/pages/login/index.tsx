@@ -1,47 +1,66 @@
-import React, { useState } from 'react';
-import { API_PATH } from 'constant';
+import React, { FormEvent } from 'react';
+import { Link } from 'react-router-dom';
+import { useAuth } from 'hooks/useAuth';
+import { ROUTES } from 'constant';
+import { IIdPassword } from 'shared/interfaces/default-interfaces';
+import Input from 'components/ui/input';
+import { useLayout } from 'hooks/useLayout';
 import { useEffectOnce } from 'hooks/useEffectOnce';
-import { Banner, Notice, Petition } from 'components/main';
-import type { IBanner } from 'components/main/banner';
-import type { INotice } from 'components/main/notice';
-import type { IPetition } from 'components/main/petition';
-import { useApi } from 'hooks/useApi';
 
-interface IMain {
-   carousels: IBanner[];
-   recentNews: INotice[];
-   popularPetitions: IPetition[];
-   recentConferences: [
-      {
-         id: number;
-         title: string;
+export default function Login() {
+   const { setFullscreen, setTitle, setBackButton } = useLayout();
+   const initLoginInfo: IIdPassword = {
+      studentId: '',
+      password: '',
+   };
+   const [loginInfo, setLoginInfo] = React.useState<IIdPassword>(initLoginInfo);
+   const { login } = useAuth();
+
+   const handle = {
+      login: (e: FormEvent<HTMLFormElement>) => {
+         e.preventDefault();
+         login(loginInfo);
       },
-   ];
-}
-
-export default function Main() {
-   const [main, setMain] = useState<IMain | null>(null);
-   const { get } = useApi();
-
-   const fetchMain = async () => {
-      const data = await get<IMain>(API_PATH.MAIN.ROOT);
-      setMain(data);
    };
 
    useEffectOnce(() => {
-      fetchMain();
+      setFullscreen(true);
+      setTitle('로그인');
+      setBackButton(true);
    });
 
    return (
-      <main className='rounded-t-xl'>
-         <div className='px-6 pt-5 pb-4'>
-            <h1 className='text-4xl font-bold'>Dankook University</h1>
-            <h2 className='text-2xl font-medium mb-2'>도전하는 지성, 세계를 향한 창조</h2>
-            <span className='text-xs'>DANKOOK UNIVERSITY STUDENT COUNCIL</span>
-         </div>
-         <Banner banners={main?.carousels} />
-         <Notice notices={main?.recentNews} />
-         <Petition petitions={main?.popularPetitions} />
-      </main>
+      <>
+         <form data-testid='login-form' onSubmit={handle.login}>
+            <Input
+               value={loginInfo.studentId}
+               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  if (e.target.value.length < 9) {
+                     setLoginInfo((prev) => {
+                        return { ...prev, studentId: e.target.value };
+                     });
+                  }
+               }}
+               data-testid='id-input'
+               type='number'
+               placeholder='학번'
+            />
+            <Input
+               value={loginInfo.password}
+               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setLoginInfo((prev) => {
+                     return { ...prev, password: e.target.value };
+                  });
+               }}
+               data-testid='password-input'
+               type='password'
+               placeholder='비밀번호'
+            />
+            <button data-testid='login-button'>로그인</button>
+         </form>
+         {/* ROUTES에 아래 페이지 경로 업데이트시 변경 예정 */}
+         <Link to={ROUTES.SIGNUP.TERMS}>회원가입</Link>
+         <Link to={ROUTES.LOGIN.FINDIDPW}>ID/PW 찾기</Link>
+      </>
    );
 }
