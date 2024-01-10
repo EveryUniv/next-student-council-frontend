@@ -1,12 +1,12 @@
 import React from 'react';
-import axios from 'axios';
 import { API_PATH } from 'constant';
-import { useAlert } from 'hooks/useAlert';
 import { useEffectOnce } from 'hooks/useEffectOnce';
 import Box from 'components/ui/box';
 import Button from 'components/ui/button';
 import Text from 'components/ui/text';
 import { useLayout } from 'hooks/useLayout';
+import { useApi } from 'hooks/useApi';
+import { useAuth } from 'hooks/useAuth';
 
 interface IMyInfo {
    studentId: string;
@@ -23,22 +23,24 @@ interface IMyInfo {
 }
 
 export default function MyPage() {
-   const { alert } = useAlert();
-   const { setTitle } = useLayout();
+   const { setLayout } = useLayout();
+   const { logout } = useAuth();
    const [myInfo, setMyInfo] = React.useState<IMyInfo | null>(null);
+   const { get } = useApi();
 
    const fetchMyInfo = async () => {
-      try {
-         const { data } = await axios.get<IMyInfo>(API_PATH.USER.ME);
-         setMyInfo(data);
-      } catch (error) {
-         alert(error);
-      }
+      const data = await get<IMyInfo>(API_PATH.USER.ME, { authenticate: true });
+      setMyInfo(data);
    };
 
    useEffectOnce(() => {
       fetchMyInfo();
-      setTitle('마이페이지');
+      setLayout({
+         title: '마이페이지',
+         backButton: true,
+         isMain: false,
+         fullscreen: false,
+      });
    });
 
    return (
@@ -97,7 +99,9 @@ export default function MyPage() {
             </Text>
          </Box>
          <Box className='mt-4 flex flex-col'>
-            <Button variant='red'>로그아웃</Button>
+            <Button variant='red' onClick={() => logout()}>
+               로그아웃
+            </Button>
             <Button>탈퇴하기</Button>
          </Box>
       </div>

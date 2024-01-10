@@ -46,10 +46,23 @@ export const ROUTES = {
    SIGNUP: {
       /** 루트 */
       ROOT: '/signup',
-      /** 학생 인증 */
-      VERIFY: '/signup/verify',
       /** 동의 */
       TERMS: '/signup/terms',
+      /** 학생 인증 */
+      VERIFY: '/signup/verify',
+      /** 회원 정보 입력 */
+      INFO: '/signup/info',
+   },
+   /** 총학생회 */
+   COUNCIL: {
+      /** 인사말 */
+      GREETING: '/greeting',
+      /** 조직도 */
+      ORGANIZATION: '/organization',
+      /** 오시는 길 */
+      LOCATION: '/location',
+      /** 모집요강 */
+      RECRUITMENT: '/recruitment',
    },
    /** 대여물품 */
    RENTAL: {
@@ -57,6 +70,23 @@ export const ROUTES = {
       ROOT: '/rental',
       /** 상세 품목 조회 */
       ITEM: '/rental/:id',
+   },
+   PETITION: {
+      /** 청원 루트 */
+      ROOT: '/petition',
+      /** 청원 상세보기 */
+      POST: '/petition/:id',
+      /** 청원 글쓰기 */
+      SUBMIT: '/petition/submit',
+   },
+   /** 공지사항 */
+   NOTICE: {
+      /** 루트 */
+      ROOT: '/notice',
+      /** 청원 글 작성 */
+      POST: '/notice/post',
+      /** 공지 상세보기 */
+      ID: '/notice/:id',
    },
 };
 
@@ -72,6 +102,16 @@ export const API_PATH = {
       /** 회원가입 */
       SIGNUP: {
          VERIFY: '/user/dku/verify',
+         INFO: {
+            /** 회원가입 */
+            ROOT: (signupToken: string) => `/user/${signupToken}`,
+            /** 닉네임 중복 검사 */
+            NICKNAME: '/user/valid',
+            /** 인증 SMS 전송 */
+            PHONE_VERIFICATION: (signupToken: string) => `/user/sms/${signupToken}`,
+            /** SMS 코드 확인 */
+            CODE: (signupToken: string) => `/user/sms/verify/${signupToken}`,
+         },
       },
    },
    MAIN: {
@@ -81,11 +121,43 @@ export const API_PATH = {
       CAROUSEL: '/main/carousel',
       /** 학사일정 */
       SCHEDULE: '/main/schedule',
+      /** 학식 정보 */
+      CAFETERIA: '/cafeteria/meal/today',
    },
-   RENTAL: {
-      /** 대여물품 목록 */
-      ITEM: '/rental/item',
-      /** 대여물품 단건조회 */
-      ITEM_DETAIL: (id: string) => `/rental/${id}`,
+   POST: {
+      /* 청원게시판 */
+      PETITON: '/post/petition',
+      /* 공지 */
+      NOTICE: {
+         /** 공지 목록 */
+         ROOT: '/post/notice',
+         /** 공지 단건조회 */
+         ID: (id: string) => `/post/notice/${id}`,
+      },
+      /* 대여물품 */
+      PETITION: '/post/petition',
+      RENTAL: {
+         /** 대여물품 목록 */
+         ITEM: '/rental/item',
+         /** 대여물품 단건조회 */
+         ITEM_DETAIL: (id: string) => `/rental/${id}`,
+      },
    },
+};
+
+/**
+ * @description API query string
+ */
+export const QUERY_STRING = {
+   PAGE: 'page',
+   SIZE: 'size',
+   SORT: 'sort',
+   KEYWORD: 'keyword',
+};
+
+/**
+ * @description Page Size
+ */
+export const PAGE_SIZE = {
+   RENTAL: 20,
 };

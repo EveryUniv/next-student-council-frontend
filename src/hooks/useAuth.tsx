@@ -11,7 +11,10 @@ export const useAuth = () => {
 
    const login = async (loginInfo: IIdPassword) => {
       try {
-         const { data } = await axios.post<ILoginResponse>(API_PATH.USER.LOGIN, loginInfo);
+         const { data } = await axios.post<ILoginResponse>(
+            CONSTANTS.SERVER_URL + API_PATH.USER.LOGIN,
+            loginInfo,
+         );
          localStorage.setItem(CONSTANTS.atk_key, data.accessToken);
          localStorage.setItem(CONSTANTS.rtk_key, data.refreshToken);
          navigate(ROUTES.MAIN);
@@ -24,7 +27,7 @@ export const useAuth = () => {
       try {
          localStorage.removeItem(CONSTANTS.atk_key);
          localStorage.removeItem(CONSTANTS.rtk_key);
-         navigate(ROUTES.LOGIN);
+         navigate(ROUTES.MAIN);
       } catch (error) {
          alert(error);
       }

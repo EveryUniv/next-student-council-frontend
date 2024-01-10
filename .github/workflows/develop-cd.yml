@@ -37,7 +37,7 @@ jobs:
       run: |
         yarn add react-scripts
         npm install -save react-scripts --legacy-peer-deps
-        CI=false npm run build:development
+        CI=false npm run build
       shell: bash
 
     - name: Docker build and push
@@ -52,7 +52,7 @@ jobs:
         docker push $USERNAME/$REPO:latest
 
     - name: SSH Remote Commands
-      uses: appleboy/ssh-action@0.1.4
+      uses: appleboy/ssh-action@v0.1.4
       env:
         REPO: ${{ secrets.DOCKER_REPO }}
       with:
