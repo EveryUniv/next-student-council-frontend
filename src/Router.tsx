@@ -22,8 +22,6 @@ import PrivateRoute from 'PrivateRoute';
 import NoticeDetail from 'pages/notice/[id]';
 import NoticeBoard from 'pages/notice/index';
 import PetitionDetail from 'pages/petition/[id]';
-import ConferenceBoard from 'pages/conference';
-import RuleBoard from 'pages/rule';
 
 /**
  * @description 라우터
@@ -61,8 +59,6 @@ export default function Router() {
                <Route path={ROUTES.PETITION.POST} element={<PetitionForm />} />
                <Route path={ROUTES.NOT_FOUND} element={<NotFound />} />
                <Route path={ROUTES.NOTICE.POST} element={<NoticePost />} />
-               <Route path={ROUTES.CONFERENCE.ROOT} element={<ConferenceBoard />} />
-               <Route path={ROUTES.RULE.ROOT} element={<RuleBoard />} />
             </Routes>
          </DefaultLayout>
       </BrowserRouter>
