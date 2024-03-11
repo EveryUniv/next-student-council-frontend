@@ -1,60 +1,38 @@
-import React, { useState } from 'react';
-import { API_PATH } from 'constant';
 import { useEffectOnce } from 'hooks/useEffectOnce';
+import { HEADING_TEXT, HEADING_STYLE } from 'constants/heading';
 import { Banner, Notice, Petition, Cafeteria } from 'components/main';
-import type { IBanner } from 'components/main/banner';
-import type { INotice } from 'components/main/notice';
-import type { IPetition } from 'components/main/petition';
-import { useApi } from 'hooks/useApi';
 import { useLayout } from 'hooks/useLayout';
-import Service from 'components/main/service';
-
-interface IMain {
-   carousels: IBanner[];
-   recentNotices: INotice[];
-   popularPetitions: IPetition[];
-   recentConferences: [
-      {
-         id: number;
-         title: string;
-      },
-   ];
-}
+import { useGetMain } from 'hooks/query/main/query';
+import { useFetchMyInfo } from 'hooks/useFetchMyInfo';
+import React from 'react';
 
 export default function Main() {
-   const [main, setMain] = useState<IMain>();
-   const { get } = useApi();
    const { setLayout } = useLayout();
-
-   const fetchMain = async () => {
-      const data = await get<IMain>(API_PATH.MAIN.ROOT, {
-         authenticate: true,
-         log: true,
-         contentType: 'application/json',
-      });
-      setMain(data);
-   };
+   const { fetchMyInfo } = useFetchMyInfo();
+   const { data: main } = useGetMain();
 
    useEffectOnce(() => {
-      fetchMain();
+      fetchMyInfo();
       setLayout({
          title: null,
          backButton: false,
          isMain: true,
          fullscreen: false,
-         heading: 'DANKOOK UNIVERSITY',
-         subHeading: 'DANKOOK UNIV STUDENT COUNCIL',
+         headingText: HEADING_TEXT.MAIN.HEAD,
+         subHeadingText: HEADING_TEXT.MAIN.SUBHEAD,
+         headingStyle: HEADING_STYLE.MAIN.HEAD,
+         subHeadingStyle: HEADING_STYLE.MAIN.SUBHEAD,
+         rounded: false,
       });
    });
 
    return (
       <main>
-         <Banner banners={main?.carousels} />
+         <Banner banners={main?.carousels ?? []} />
          <div className='bg-gray-100 pt-5 pb-4'>
             <Notice notices={main?.recentNotices} />
             <Petition petitions={main?.popularPetitions} />
             <Cafeteria />
-            <Service />
          </div>
       </main>
    );

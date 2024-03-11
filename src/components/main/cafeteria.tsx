@@ -1,76 +1,54 @@
 import React, { useState } from 'react';
-import { useEffectOnce } from 'hooks/useEffectOnce';
-import { useApi } from 'hooks/useApi';
-import { API_PATH } from 'constant';
-
-interface ICafeteria {
-   mealData: string;
-   breakfast: string;
-   lunch: string;
-   dinner: string;
-}
-
-const mealOptions = [
-   { key: 'breakfast', label: '아침' },
-   { key: 'lunch', label: '점심' },
-   { key: 'dinner', label: '저녁' },
-];
+import { useGetCafeteria } from 'hooks/query/main/query';
+import SvgIcon from 'components/common/icon/SvgIcon';
 
 export default function Cafeteria() {
-   const { get } = useApi();
-   const [cafeteria, setCafeteria] = useState<ICafeteria>();
    const [selectedMeal, setSelectedMeal] = useState('breakfast');
 
+   const emptyCafeteria = '학식 데이터가 존재하지 않습니다.';
+
+   const { data: cafeteria } = useGetCafeteria();
+   const cafeteriaInfo = cafeteria ? cafeteria[selectedMeal] : emptyCafeteria;
+
    const handleMealData = () => {
-      switch (selectedMeal) {
-         case 'breakfast':
-            return <p>{cafeteria?.breakfast}</p>;
-         case 'lunch':
-            return <p>{cafeteria?.lunch}</p>;
-         case 'dinner':
-            return <p>{cafeteria?.dinner}</p>;
-         default:
-            return <></>;
-      }
+      return <p className='whitespace-pre-line'>{cafeteriaInfo}</p>;
    };
 
-   useEffectOnce(() => {
-      fetchMeal();
-   });
+   const mealButton =
+      'flex items-center gap-[2px] w-[70px] h-6 text-center text-sm px-3 rounded-xl shadow-md bg-no-repeat';
 
-   const fetchMeal = async () => {
-      const data = await get<ICafeteria>(API_PATH.MAIN.CAFETERIA, {
-         authenticate: true,
-         contentType: 'application/json',
-         log: true,
-      });
-      setCafeteria(data);
-   };
+   const mealOptions = [
+      { key: 'breakfast', icon: 'lunch', label: '아침' },
+      { key: 'lunch', icon: 'lunch', label: '점심' },
+      { key: 'dinner', icon: 'dinner', label: '저녁' },
+   ];
 
    return (
-      cafeteria && (
-         <section className='px-4 py-5 m-4'>
-            <h4 className='font-bold text-lg ml-4 mb-4'>오늘의 학식</h4>
-            <div className='flex gap-2'>
-               <ul className='flex flex-col gap-1'>
-                  {mealOptions.map((option) => (
-                     <li key={option.key}>
-                        <button
-                           className={`${
-                              selectedMeal === option.key ? 'bg-black text-white' : 'bg-white text-black'
-                           } w-[70px] text-center text-sm py-1 rounded-xl bg-breakfast shadow-md bg-no-repeat`}
-                           onClick={() => setSelectedMeal(option.key)}
-                        >
-                           {option.label}
-                        </button>
-                     </li>
-                  ))}
-               </ul>
-               <div className='w-[250px] px-4 py-5 text-sm rounded-xl bg-white shadow-md'>
-                  {handleMealData()}
-               </div>
-            </div>
-         </section>
-      )
+      <section className='px-4 py-5 m-4 rounded-xl bg-white shadow-md'>
+         <h4 className='font-bold text-lg mb-4'>오늘의 학식</h4>
+         <div className='flex gap-2'>
+            <ul className='flex flex-col gap-1'>
+               {mealOptions.map((option) => (
+                  <li key={option.key}>
+                     <button
+                        className={`${
+                           selectedMeal === option.key ? 'bg-black text-white' : 'bg-white text-black'
+                        } ${mealButton}`}
+                        onClick={() => setSelectedMeal(option.key)}
+                     >
+                        <SvgIcon
+                           id={option.icon}
+                           width={15}
+                           height={15}
+                           color={`${selectedMeal === option.key ? 'white' : 'black'}`}
+                        />
+                        {option.label}
+                     </button>
+                  </li>
+               ))}
+            </ul>
+            <div className='w-[250px] px-4 text-sm'>{handleMealData()}</div>
+         </div>
+      </section>
    );
 }

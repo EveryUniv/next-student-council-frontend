@@ -2,30 +2,30 @@ import React from 'react';
 import { useEffectOnce } from 'hooks/useEffectOnce';
 import { useLayout } from 'hooks/useLayout';
 import Box from 'components/ui/box';
-import document from '../../assets/icons/document.svg';
+import SinglePageLayout from 'layouts/SinglePageLayout';
+import { HEADING_TEXT, HEADING_STYLE } from 'constants/heading';
+import { FileBox } from 'components/ui/box/PostBox';
 
 export default function Recruitment() {
    const { setLayout } = useLayout();
 
    useEffectOnce(() => {
       setLayout({
-         title: '총학생회',
+         title: HEADING_TEXT.COUNCIL.HEAD,
          backButton: true,
          isMain: false,
-         heading: '부원모집',
-         subHeading: '모집요강',
          fullscreen: false,
+         headingText: HEADING_TEXT.RECRUIT.HEAD,
+         subHeadingText: HEADING_TEXT.RECRUIT.SUBHEAD,
+         headingStyle: HEADING_STYLE.COUNCIL.HEAD,
+         subHeadingStyle: HEADING_STYLE.COUNCIL.SUBHEAD,
+         rounded: true,
       });
    });
 
-   const fileList = [
-      { name: '파일1.pdf', type: 'pdf' },
-      { name: '파일2.doc', type: 'doc' },
-   ];
-
    return (
-      <>
-         <Box>
+      <SinglePageLayout>
+         <Box type='shadow' className='text-sm'>
             <h3>[55대 담다 총학생회 재학생 집행부 모집 ]</h3>
             <br></br>
             <p>
@@ -47,18 +47,7 @@ export default function Recruitment() {
                부탁드립니다.
             </span>
          </Box>
-         <Box>
-            <ul>
-               {fileList.map((file, index) => (
-                  <li key={index} className='flex'>
-                     <img src={document} alt='모집요강' className='mr-2' />
-                     <a href={`${file.name}`} download={file.name}>
-                        {file.name} ({file.type})
-                     </a>
-                  </li>
-               ))}
-            </ul>
-         </Box>
-      </>
+         <FileBox files={[{ id: 0, url: '', originalName: '지원서.pdf', mimeType: 'pdf' }]} />
+      </SinglePageLayout>
    );
 }

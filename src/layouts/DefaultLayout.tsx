@@ -1,38 +1,85 @@
-import React from 'react';
 import Gnb from 'components/common/gnb';
 import Gnh from 'components/common/gnh';
+import Menu from 'components/main/menu';
 import Nav from 'components/common/nav';
-import { CONSTANTS } from 'constant';
+import { bottomNavSize } from 'constants/nav';
 import { IWithReactChildren } from 'shared/interfaces/default-interfaces';
 import { gnbState } from 'stores/gnb-store';
 import { gnhState } from 'stores/gnh-store';
 import { navStore } from 'stores/nav-store';
 import { AnimatePresence } from 'framer-motion';
-import { TextSkeleton } from 'components/ui/skeleton';
+import React, { useEffect } from 'react';
+import { useEnrollmentStore } from 'stores/enrollment-store';
+import { useAuth } from 'hooks/useAuth';
+import { useLocation } from 'react-router-dom';
+import { useDefaultModal } from 'hooks/useDefaultModal';
+import { menuStore } from 'stores/menu-store';
 
 type DefaultLayoutProps = IWithReactChildren & React.HTMLAttributes<HTMLDivElement>;
 
-export default function DefaultLayout({ children, className, ...props }: DefaultLayoutProps) {
+export default function DefaultLayout({ children, ...props }: DefaultLayoutProps) {
    const { title, backButton, isMain } = gnbState();
-   const { heading, subHeading } = gnhState();
-   const { fullscreen } = navStore();
+   const { headingText, subHeadingText, headingStyle, subHeadingStyle } = gnhState();
+   const { fullscreen, rounded, margin } = navStore();
+   const { menuOpen } = menuStore();
+   const defaultStyle = 'w-[390px] mx-auto bg-black';
+
+   const { enrollment } = useEnrollmentStore();
+   const { isLoggedIn } = useAuth();
+   const { pathname } = useLocation();
+   const { modal } = useDefaultModal();
+
+   useEffect(() => {
+      if (pathname.indexOf('/mypage') === -1 && enrollment === false && isLoggedIn) {
+         setTimeout(() => {
+            modal({
+               content: '회원 정보 업데이트 후 이용 가능합니다.',
+               target: '/mypage/update',
+               disableCancle: true,
+            });
+         }, 500);
+      }
+   }, [pathname, enrollment]);
+
    return (
-      <>
-         <Gnb
-            left={backButton ? <Gnb.GoBack /> : isMain ? <Gnb.Logo /> : undefined}
-            center={<Gnb.Title>{title || <TextSkeleton width={4} />}</Gnb.Title>}
-         />
-         {heading !== null && (subHeading !== null || subHeading === '') && (
-            <Gnh heading={heading} subHeading={subHeading} isMain={isMain} />
+      <div className={defaultStyle}>
+         {menuOpen ? (
+            <Menu />
+         ) : (
+            <>
+               <Gnb
+                  left={backButton ? <Gnb.GoBack /> : isMain ? <Gnb.Logo /> : null}
+                  center={title ? <Gnb.Title>{title}</Gnb.Title> : null}
+               />
+               {headingText && (
+                  <Gnh
+                     headingText={headingText}
+                     subHeadingText={subHeadingText}
+                     headingStyle={headingStyle}
+                     subHeadingStyle={subHeadingStyle}
+                  />
+               )}
+               <div
+                  className='w-[390px] mx-auto overflow-y-auto overflow-x-hidden'
+                  style={{ marginBottom: bottomNavSize, marginTop: margin }}
+                  {...props}
+               >
+                  <div
+                     className={`${rounded && 'rounded-t-3xl pt-4'} 
+                   flex flex-col bg-white`}
+                  >
+                     {children}
+                  </div>
+               </div>
+               <AnimatePresence>
+                  {!fullscreen && (
+                     <>
+                        <Nav />
+                     </>
+                  )}
+               </AnimatePresence>
+            </>
          )}
-         <div
-            className={`w-[390px] mx-auto overflow-y-auto overflow-x-hidden bg-black ${className ?? ''}`}
-            style={{ marginBottom: CONSTANTS.bottomNavSize }}
-            {...props}
-         >
-            <div className='flex flex-col rounded-t-xl bg-white pt-4'>{children}</div>
-         </div>
-         <AnimatePresence>{!fullscreen && <Nav />}</AnimatePresence>
-      </>
+      </div>
    );
 }

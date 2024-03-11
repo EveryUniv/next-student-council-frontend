@@ -1,28 +1,22 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+import Selector from 'components/ui/selector';
 
 interface GnhProps {
-   heading: string;
-   subHeading: string | null;
-   isMain: boolean;
+   headingText: string;
+   subHeadingText?: string;
+   subHeadingStyle: string;
+   headingStyle: string;
 }
 
-const Gnh = ({ heading, subHeading, isMain }: GnhProps) => (
-   <>
-      <div className={'w-[390px] mx-auto px-8 py-8 justify-between h-[160px] items-center bg-black'}>
-         {heading && (
-            <h2 className={`${isMain && 'text-center'} text-2xl font-semibold mb-4 text-white`}>{heading}</h2>
-         )}
-         {subHeading && (
-            <h3
-               className={`${
-                  isMain ? 'text-base text-center font-normal' : 'text-xl font-semibold'
-               } text-white`}
-            >
-               {subHeading}
-            </h3>
-         )}
-      </div>
-   </>
+const Gnh = ({ headingText, subHeadingText, headingStyle, subHeadingStyle }: GnhProps) => (
+   <Fragment>
+      {headingText && <h1 className={`${headingStyle} text-2xl font-extrabold text-white`}>{headingText}</h1>}
+      {headingText === '총학생회' && subHeadingText ? (
+         <Selector subHeadingText={subHeadingText} />
+      ) : (
+         <h2 className={`${subHeadingStyle} text-white`}>{subHeadingText}</h2>
+      )}
+   </Fragment>
 );
 
 export default Gnh;

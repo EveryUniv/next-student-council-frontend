@@ -1,14 +1,20 @@
 import React from 'react';
-import { useApi } from './useApi';
+import { IFormInfo } from 'api/upload/types/upload';
+import { usePostFormUpload } from './query/upload/mutation';
+import { useAlert } from './useAlert';
 
-export interface IFormInfo {
-   title: string;
-   body: string;
-   files: File[];
-}
-
-export const useFormUpload = (initFormInfo: IFormInfo, apiPath: string) => {
+export const useFormUpload = ({
+   initFormInfo,
+   API_PATH,
+   NAVIGATE_PATH,
+}: {
+   initFormInfo: IFormInfo;
+   API_PATH: string;
+   NAVIGATE_PATH: string;
+}) => {
    const [formInfo, setFormInfo] = React.useState<IFormInfo>(initFormInfo);
+   const { mutate } = usePostFormUpload(NAVIGATE_PATH);
+   const { alert } = useAlert();
 
    const handleUpdate = (value: string) => {
       const cleanedValue = value.replaceAll(/<\/?p[^>]*>/g, '').replace(/<br>/g, '');
@@ -17,21 +23,22 @@ export const useFormUpload = (initFormInfo: IFormInfo, apiPath: string) => {
          body: cleanedValue,
       });
    };
-   const { post } = useApi();
 
-   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       const formData = new FormData();
       formData.append('title', formInfo.title);
       formData.append('body', formInfo.body);
-      for (const file of formInfo.files) {
-         formData.append('files', file);
+      if (formInfo.files !== undefined) {
+         for (const file of formInfo.files) {
+            formData.append('files', file);
+         }
       }
-      post<IFormInfo, number>(apiPath, formInfo, {
-         authenticate: true,
-         contentType: 'multipart/form-data',
-         log: true,
-      });
+      if (formInfo.title.length > 0 && formInfo.body.length > 0) {
+         mutate({ formInfo, API_PATH });
+      } else {
+         alert('제목과 내용을 입력해주세요');
+      }
    };
 
    return {

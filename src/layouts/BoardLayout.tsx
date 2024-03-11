@@ -9,21 +9,24 @@ export interface IBoardList {
    author: string;
    body: string;
    createdAt: string;
-   files: string;
+   files: [{ id: number; url: string; originalName: string; mimeType: string }];
    views: string;
    tag: string;
    status?: string;
    expiresAt?: string;
    agreeCount?: string;
    blinded: string;
+   images?: [{ id: number; url: string; originalName: string; mimeType: string; thumbnailUrl: string }];
 }
 
 export default function BoardLayout({
    api,
    setCell,
+   isFileLink, // 페이지 이동 없이 파일 링크만 새탭에서 여는 경우
 }: {
    api: string;
    setCell: (data: IBoardList) => JSX.Element;
+   isFileLink?: boolean;
 }) {
    const { list, isLoading, bottom } = useInfiniteScroll<IBoardList>(api);
    const [isEmpty, setIsEmpty] = React.useState(false);
@@ -47,7 +50,7 @@ export default function BoardLayout({
             <Board.Cell
                key={data.id}
                onClick={() => {
-                  navigate(`${data.id}`);
+                  isFileLink ? window.open(data.files[0].url) : navigate(`${data.id}`);
                }}
             >
                {setCell(data)}

@@ -1,27 +1,36 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { ROUTES } from './constant';
+import { ROUTES } from 'constants/route';
 import DefaultLayout from 'layouts/DefaultLayout';
 import PetitionBoard from 'pages/petition';
-import Notice from 'pages/notice/index';
 import NoticePost from 'pages/notice/post';
 import PetitionForm from 'pages/petition/post';
-
 import Main from 'pages';
 import NotFound from 'pages/404';
 import Login from 'pages/login';
 import Signup from 'pages/signup';
 import SignupTerms from 'pages/signup/terms';
 import SignupVerify from 'pages/signup/verify';
+import SignupSuccess from 'pages/signup/success';
 import SignupInfo from 'pages/signup/info';
 import Greeting from 'pages/council';
 import Organization from 'pages/council/organization';
 import Location from 'pages/council/location';
 import Recruitment from 'pages/council/recruitment';
-import MyPage from 'pages/mypage';
+import MyPage from 'pages/mypage/index';
 import PrivateRoute from 'PrivateRoute';
 import NoticeDetail from 'pages/notice/[id]';
 import NoticeBoard from 'pages/notice/index';
+import PetitionDetail from 'pages/petition/[id]';
+import ConferenceBoard from 'pages/conference';
+import RuleBoard from 'pages/rule';
+import MyPagePassword from 'pages/mypage/password';
+import MyPageEdit from 'pages/mypage/edit';
+import MyPageUpdate from 'pages/mypage/update';
+import ResetIdPw from 'pages/reset/resetIdPw';
+import ResetId from 'pages/reset/resetId';
+import VerifyPw from 'pages/reset/verifyPw';
+import ResetPw from 'pages/reset/resetPw';
 
 /**
  * @description 라우터
@@ -35,11 +44,39 @@ export default function Router() {
             <Routes>
                <Route path={ROUTES.MAIN} element={<Main />} />
                <Route path={ROUTES.LOGIN} element={<Login />} />
+               <Route path={ROUTES.RESET.INDEX} element={<ResetIdPw />} />
+               <Route path={ROUTES.RESET.ID} element={<ResetId />} />
+               <Route path={ROUTES.RESET.PW_VERIFY} element={<VerifyPw />} />
+               <Route path={ROUTES.RESET.PW} element={<ResetPw />} />
                <Route
-                  path={ROUTES.MYPAGE}
+                  path={ROUTES.MYPAGE.INDEX}
                   element={
                      <PrivateRoute>
                         <MyPage />
+                     </PrivateRoute>
+                  }
+               />
+               <Route
+                  path={ROUTES.MYPAGE.PASSWORD}
+                  element={
+                     <PrivateRoute>
+                        <MyPagePassword />
+                     </PrivateRoute>
+                  }
+               />
+               <Route
+                  path={ROUTES.MYPAGE.EDIT}
+                  element={
+                     <PrivateRoute>
+                        <MyPageEdit />
+                     </PrivateRoute>
+                  }
+               />
+               <Route
+                  path={ROUTES.MYPAGE.UPDATE}
+                  element={
+                     <PrivateRoute>
+                        <MyPageUpdate />
                      </PrivateRoute>
                   }
                />
@@ -47,19 +84,21 @@ export default function Router() {
                   <Route index path={ROUTES.SIGNUP.VERIFY} element={<SignupVerify />} />
                   <Route path={ROUTES.SIGNUP.TERMS} element={<SignupTerms />} />
                   <Route path={ROUTES.SIGNUP.INFO} element={<SignupInfo />} />
+                  <Route path={ROUTES.SIGNUP.SUCCESS} element={<SignupSuccess />} />
                </Route>
                <Route path={ROUTES.COUNCIL.GREETING} element={<Greeting />} />
                <Route path={ROUTES.COUNCIL.ORGANIZATION} element={<Organization />} />
                <Route path={ROUTES.COUNCIL.LOCATION} element={<Location />} />
                <Route path={ROUTES.COUNCIL.RECRUITMENT} element={<Recruitment />} />
                <Route path={ROUTES.PETITION.ROOT} element={<PetitionBoard />} />
+               <Route path={ROUTES.PETITION.ID} element={<PetitionDetail />} />
                <Route path={ROUTES.NOTICE.ROOT} element={<NoticeBoard />} />
                <Route path={ROUTES.NOTICE.ID} element={<NoticeDetail />} />
-               <Route path={ROUTES.PETITION.SUBMIT} element={<PetitionForm />} />
+               <Route path={ROUTES.PETITION.POST} element={<PetitionForm />} />
                <Route path={ROUTES.NOT_FOUND} element={<NotFound />} />
-               <Route path={ROUTES.NOTICE.ROOT} element={<Notice />}>
-                  <Route path={ROUTES.NOTICE.POST} element={<NoticePost />} />
-               </Route>
+               <Route path={ROUTES.NOTICE.POST} element={<NoticePost />} />
+               <Route path={ROUTES.CONFERENCE.ROOT} element={<ConferenceBoard />} />
+               <Route path={ROUTES.RULE.ROOT} element={<RuleBoard />} />
             </Routes>
          </DefaultLayout>
       </BrowserRouter>

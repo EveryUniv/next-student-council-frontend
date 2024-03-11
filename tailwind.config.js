@@ -1,11 +1,12 @@
+import { Palette } from './src/constants/colors';
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
    content: ['./src/**/*.{html,js,jsx,ts,tsx}'],
+   mode: 'jit', // calc 사용 모드
    theme: {
       extend: {
-         width: {
-            '311': '311px',
-         },
+         colors: { ...Palette },
          animation: {
             fadeIn: 'fadeIn 0.3s ease-in-out',
             fadeOut: 'fadeOut 0.3s ease-in-out',
@@ -14,7 +15,6 @@ module.exports = {
             breakfast: "url('./assets/icons/breakfast.svg')",
             dinner: "url('./assets/icons/dinner.svg')",
          },
-
          // that is actual animation
          keyframes: (theme) => ({
             fadeIn: {
@@ -26,6 +26,9 @@ module.exports = {
                '100%': { opacity: '0' },
             },
          }),
+         boxShadow: {
+            custom: '0 4px 3px rgba(0, 0, 0, 0.25)',
+         },
       },
    },
    plugins: [],

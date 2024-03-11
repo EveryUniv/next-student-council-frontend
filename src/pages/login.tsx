@@ -1,71 +1,29 @@
-import React, { FormEvent } from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from 'hooks/useAuth';
-import { ROUTES } from 'constant';
-import { IIdPassword } from 'shared/interfaces/default-interfaces';
-import Input from 'components/ui/input';
+import React, { Fragment } from 'react';
+import LoginForm from 'components/login/form';
 import { useLayout } from 'hooks/useLayout';
 import { useEffectOnce } from 'hooks/useEffectOnce';
+import { HEADING_TEXT, HEADING_STYLE } from 'constants/heading';
 
 export default function Login() {
    const { setLayout } = useLayout();
-   const initLoginInfo: IIdPassword = {
-      studentId: '',
-      password: '',
-   };
-   const [loginInfo, setLoginInfo] = React.useState<IIdPassword>(initLoginInfo);
-   const { login } = useAuth();
-
-   const handle = {
-      login: (e: FormEvent<HTMLFormElement>) => {
-         e.preventDefault();
-         login(loginInfo);
-      },
-   };
 
    useEffectOnce(() => {
       setLayout({
          title: null,
          backButton: true,
          isMain: false,
-         heading: 'Login',
-         subHeading: '단국대학교 총학생회 로그인',
-         fullscreen: true,
+         fullscreen: false,
+         headingText: HEADING_TEXT.LOGIN.HEAD,
+         subHeadingText: HEADING_TEXT.LOGIN.SUBHEAD,
+         headingStyle: HEADING_STYLE.LOGIN.HEAD,
+         subHeadingStyle: HEADING_STYLE.LOGIN.SUBHEAD,
+         rounded: true,
       });
    });
 
    return (
-      <>
-         <form data-testid='login-form' onSubmit={handle.login}>
-            <Input
-               value={loginInfo.studentId}
-               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  if (e.target.value.length < 9) {
-                     setLoginInfo((prev) => {
-                        return { ...prev, studentId: e.target.value };
-                     });
-                  }
-               }}
-               data-testid='id-input'
-               type='number'
-               placeholder='학번'
-            />
-            <Input
-               value={loginInfo.password}
-               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setLoginInfo((prev) => {
-                     return { ...prev, password: e.target.value };
-                  });
-               }}
-               data-testid='password-input'
-               type='password'
-               placeholder='비밀번호'
-            />
-            <input type='submit' data-testid='login-button' value='로그인' />
-         </form>
-         {/* ROUTES에 아래 페이지 경로 업데이트시 변경 예정 */}
-         <Link to={ROUTES.NOT_FOUND}>회원가입</Link>
-         <Link to={ROUTES.NOT_FOUND}>ID/PW 찾기</Link>
-      </>
+      <Fragment>
+         <LoginForm />
+      </Fragment>
    );
 }
